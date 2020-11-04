@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/pesiqueira/Odonteu/issues"
   },
-  "homepage": "https://github.com/pesiqueira/Odonteu#readme"
+  "homepage": "https://github.com/pesiqueira/Odonteu#readme",
+  "dependencies": {
+    "nodemon": "^2.0.6"
+  }
 }
