@@ -5,7 +5,7 @@
   "main": "server/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd client && npm run build && cd .. && nodemon server/app.js"
+    "start": "cd client && npm i && npm run build && cd ../server && npm i && nodemon app.js"
   },
   "repository": {
     "type": "git",
