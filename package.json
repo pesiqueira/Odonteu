@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/app.js",
-    "build": "cd client && npm run build",
-    "install": "cd client && npm i && cd.. & cd server && npm i && cd .."
+    "build": "cd client && npm run build && cd ..",
+    "install": "cd client && npm i && cd .. && cd server && npm i && cd .."
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,5 @@
   },
   "homepage": "https://github.com/pesiqueira/Odonteu#readme",
   "dependencies": {
-    "nodemon": "^2.0.6"
   }
 }
