@@ -7,9 +7,9 @@ try {
     database : 'AgendaClinica'
   });
 
-  connection.connect();
+  // connection.connect();
 }catch(err){
   console.log('error in db')
 }
 
-// module.exports = connection;
+module.exports = connection;
