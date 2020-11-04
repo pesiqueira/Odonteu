@@ -24,3 +24,4 @@ pnpm-debug.log*
 
 client/node_modules
 server/node_modules
+server/public
