@@ -178,12 +178,16 @@ export default {
     createPatient(e){
       let v = this;
       e.preventDefault();
-      axios.post('http://localhost:1607/api/patient',this.form).then(({status,data})=>{
-        if(status==200)
-          v.toggleForm()
-        else
-          console.log(data)
-      }).catch(err=>console.log(err));
+      try {
+        axios.post('http://localhost:1607/api/patient',this.form).then(({status,data})=>{
+          if(status==200)
+            v.toggleForm()
+          else
+            console.log(data)
+        }).catch(err=>console.log(err));
+      }catch{
+        console.log('error in db')
+      }
     },
     toggleForm(){
       this.modalVisible = !this.modalVisible;

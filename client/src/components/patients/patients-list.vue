@@ -48,27 +48,35 @@ export default {
         updatePatients(){
             let v = this;
             v.items = [];
-            axios.get('http://localhost:1607/api/patients').then(({data})=>{
-                data.forEach(patient => {
-                    let itemPatient = {}
-                    for (const key in patient) {
-                        if (Object.prototype.hasOwnProperty.call(patient,key)) {
-                            const element = patient[key];
-                            itemPatient[key.replace('paciente_','')] = element
+            try{
+                axios.get('http://localhost:1607/api/patients').then(({data})=>{
+                    data.forEach(patient => {
+                        let itemPatient = {}
+                        for (const key in patient) {
+                            if (Object.prototype.hasOwnProperty.call(patient,key)) {
+                                const element = patient[key];
+                                itemPatient[key.replace('paciente_','')] = element
+                            }
                         }
-                    }
-                    v.items.push(itemPatient);
-                });
-            }).catch(err=>console.log(err));
+                        v.items.push(itemPatient);
+                    });
+                }).catch(err=>console.log(err));
+            }catch{
+                console.log('error in db')
+            }
         },
         deletePatient(idPatient){
             let v = this;
-            axios.delete('http://localhost:1607/api/patient/'+idPatient).then(({status})=>{
-                if(status==200)
-                    v.updatePatients();
-                else
-                    console.log(status);
-            })
+            try{
+                axios.delete('http://localhost:1607/api/patient/'+idPatient).then(({status})=>{
+                    if(status==200)
+                        v.updatePatients();
+                    else
+                        console.log(status);
+                })
+            }catch{
+                console.log('error in db')
+            }
         }
     },
     mounted(){
