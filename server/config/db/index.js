@@ -8,8 +8,8 @@ try {
   });
 
   connection.connect();
-}catch{
+}catch(err){
   console.log('error in db')
 }
 
-module.exports = connection;
+// module.exports = connection;

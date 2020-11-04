@@ -61,7 +61,7 @@ export default {
                         v.items.push(itemPatient);
                     });
                 }).catch(err=>console.log(err));
-            }catch{
+            }catch (e){
                 console.log('error in db')
             }
         },
@@ -74,7 +74,7 @@ export default {
                     else
                         console.log(status);
                 })
-            }catch{
+            }catch (e){
                 console.log('error in db')
             }
         }
