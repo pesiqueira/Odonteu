@@ -1,5 +1,7 @@
 var app = require('./config/express')
 
-app.listen(1607,()=>{
+const PORT = process.env.PORT || 1607;
+
+app.listen(PORT,()=>{
     console.log('Running at 1607')
 })
