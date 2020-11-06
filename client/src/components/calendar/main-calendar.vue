@@ -19,7 +19,7 @@
                     </div>
                 </div>
             </div>
-            <b-col v-for="weekDay in weekDays" :key="'hours-'+weekDay.Day">
+            <b-col v-for="weekDay in weekDays" :key="'hours-'+weekDay.Day" @click="showModal">
                 <b-row class="main-hour" v-for="hour in hours" :key="'hour-'+hour">
                     <div class="main-minute"></div>
                     <div class="main-minute" v-for="min in 4" :key="'minute-'+(min*15)">
@@ -27,64 +27,74 @@
                 </b-row>
             </b-col>
         </b-row>
+    <Schedule v-model="showSchedule"/>
     </div>
 </template>
 
 <script>
 import {mapGetters,mapMutations} from 'vuex';
+import Schedule from './schedule.vue';
 
 export default {
-  name: 'main-calendar',
-  data: () => {
-      return {
-          hours:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
-      }
-  },
-  methods:{
-      ...mapMutations(['setCurrentDate']),
-      getWeekDay(day){
-          let weekDate = new Date(this.getCurrentDate.getFullYear(), this.getCurrentDate.getMonth(), day);
-          return weekDate.getDate();
-      }
-  },
-  computed:{
-      ...mapGetters(['getCurrentDate']),
-      formattedCurrentDate(){
-          return `${this.getCurrentDate.getDate()}/${this.getCurrentDate.getMonth()+1}/${this.getCurrentDate.getFullYear()}`
-      },
-      weekDays(){
-          return [
-              {
-                  weekDay:'Seg',
-                  Day: this.getWeekDay((1 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-              },
-              {
-                  weekDay:'Ter',
-                  Day: this.getWeekDay((2 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-              },
-              {
-                  weekDay:'Qua',
-                  Day: this.getWeekDay((3 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-              },
-              {
-                  weekDay:'Qui',
-                  Day: this.getWeekDay((4 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-              },
-              {
-                  weekDay:'Sex',
-                  Day: this.getWeekDay((5 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-              },
-              {
-                  weekDay:'Sab',
-                  Day: this.getWeekDay((6 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-              },
-              {
-                  weekDay:'Dom',
-                  Day: this.getWeekDay((7 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-              }
-          ]
-      }
-  }
+    name: 'main-calendar',
+    components: {
+        Schedule
+    },
+    data: () => {
+        return {
+            hours:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],
+            showSchedule:false,
+        }
+    },
+    methods:{
+        ...mapMutations(['setCurrentDate']),
+        getWeekDay(day){
+            let weekDate = new Date(this.getCurrentDate.getFullYear(), this.getCurrentDate.getMonth(), day);
+            return weekDate.getDate();
+        },
+        showModal(){
+            this.showSchedule=false;
+            this.showSchedule=true;
+        }
+    },
+    computed:{
+        ...mapGetters(['getCurrentDate']),
+        formattedCurrentDate(){
+            return `${this.getCurrentDate.getDate()}/${this.getCurrentDate.getMonth()+1}/${this.getCurrentDate.getFullYear()}`
+        },
+        weekDays(){
+            return [
+                {
+                    weekDay:'Seg',
+                    Day: this.getWeekDay((1 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
+                },
+                {
+                    weekDay:'Ter',
+                    Day: this.getWeekDay((2 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
+                },
+                {
+                    weekDay:'Qua',
+                    Day: this.getWeekDay((3 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
+                },
+                {
+                    weekDay:'Qui',
+                    Day: this.getWeekDay((4 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
+                },
+                {
+                    weekDay:'Sex',
+                    Day: this.getWeekDay((5 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
+                },
+                {
+                    weekDay:'Sab',
+                    Day: this.getWeekDay((6 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
+                },
+                {
+                    weekDay:'Dom',
+                    Day: this.getWeekDay((7 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
+                }
+            ]
+        }
+    }
 }
 </script>
 
