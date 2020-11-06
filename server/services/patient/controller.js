@@ -1,31 +1,24 @@
+let modelCloudant = require('../cloudant/model.js');
+const generateId = require('uniqid');
+const PARTITION = 'patients'
 module.exports = (dbConnection)=>{
     return {
         CreatePatient:(req,res)=>{
             let post = req.body;
-            let body = {};
-            for (const key in post) {
-                if (post.hasOwnProperty(key)) {
-                    let element = post[key];
-                    if (element instanceof Date)
-                        element = element.toISOString().substr(0,10);
-                    body['paciente_'+key]=element;
-                }
-            }
-            var query = dbConnection.query('INSERT INTO pacientes SET ?',body,function (error,results, fields) {
-                if (error) throw error;
-                res.send(results);
-            });
+            post._id = generateId(PARTITION + ':');
+            modelCloudant.createDocument(post).then(data=>{
+                res.send(data);
+            }).catch(err=>res.send(err));
         },
         AllPatients:(req,res)=>{
-            dbConnection.query('SELECT * FROM pacientes', function (error, results, fields){
-                res.send(results);
-            })
+            let query = {"selector":{"_id":{"$gt":0}}};
+            modelCloudant.query(query,PARTITION).then(data=>res.send(data)).catch(err=>res.send(err));
         },
         DeletePatient:(req,res)=>{
-            let idpaciente = req.params.idpaciente
-            dbConnection.query('DELETE FROM pacientes WHERE idpacientes='+idpaciente, function (error, results, fields){
-                res.send(results);
-            })
+            let idpaciente = req.params.idpaciente;
+            modelCloudant.findDocument(idpaciente).then((doc)=>
+                modelCloudant.deleteDocument(doc).then(data=>res.send(data)).catch(err=>res.send(err))
+            ).catch(err =>console.log(err));
         }
     }
     

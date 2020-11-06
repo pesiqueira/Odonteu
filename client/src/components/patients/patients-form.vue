@@ -171,7 +171,7 @@ export default {
     let v = this;
     if(v.$refs['patient-form'])
       EventBus.$on('TOGGLE_PATIENT_FORM',()=>{
-        v.toggleForm();
+        this.modalVisible = !this.modalVisible;
       })
   },
   methods:{
@@ -190,7 +190,7 @@ export default {
       }
     },
     toggleForm(){
-      this.modalVisible = !this.modalVisible;
+      EventBus.$emit('TOGGLE_PATIENT_FORM')
     }
   }
 }

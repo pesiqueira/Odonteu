@@ -14,7 +14,7 @@
             </b-col>
         </b-row>
         <b-table class="mt-3" hover :fields="fields" :items="items">
-            <template #cell(idpacientes)="data">
+            <template #cell(_id)="data">
                 <b-icon-pencil-square></b-icon-pencil-square>
                 <b-icon-trash @click="deletePatient(data.value)"></b-icon-trash>
             </template>
@@ -35,7 +35,7 @@ export default {
                 {key: 'name'     , label: 'Nome'   },
                 {key: 'cpf'      , label: 'CPF'    },
                 {key: 'cellphone', label: 'Celular'},
-                {key: 'idpacientes', label: ''}
+                {key: '_id', label: ''}
             ]
         }
     },
@@ -49,18 +49,7 @@ export default {
             let v = this;
             v.items = [];
             try{
-                axios.get('http://localhost:1607/api/patients').then(({data})=>{
-                    data.forEach(patient => {
-                        let itemPatient = {}
-                        for (const key in patient) {
-                            if (Object.prototype.hasOwnProperty.call(patient,key)) {
-                                const element = patient[key];
-                                itemPatient[key.replace('paciente_','')] = element
-                            }
-                        }
-                        v.items.push(itemPatient);
-                    });
-                }).catch(err=>console.log(err));
+                axios.get('http://localhost:1607/api/patients').then(({data})=>v.items = data.docs).catch(err=>console.log(err));
             }catch (e){
                 console.log('error in db')
             }
@@ -68,12 +57,7 @@ export default {
         deletePatient(idPatient){
             let v = this;
             try{
-                axios.delete('http://localhost:1607/api/patient/'+idPatient).then(({status})=>{
-                    if(status==200)
-                        v.updatePatients();
-                    else
-                        console.log(status);
-                })
+                axios.delete('http://localhost:1607/api/patient/'+idPatient).then(({status})=>status==200?v.updatePatients():console.log(status))
             }catch (e){
                 console.log('error in db')
             }
@@ -81,7 +65,10 @@ export default {
     },
     mounted(){
         this.updatePatients();
-        EventBus.$on('TOGGLE_PATIENT_FORM',()=>this.updatePatients());
+        let v = this;
+        EventBus.$on('TOGGLE_PATIENT_FORM',()=>{setTimeout(()=>{
+            v.updatePatients();
+        },5000)});
     }
 }
 </script>
