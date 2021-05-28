@@ -26,6 +26,7 @@ module.exports = {
     sendMessage(userId,message) {
         return new Promise((resolve, reject)=>{
             getSession(userId).then((session)=>{
+                console.log(session);
                 assistant.message({
                     assistantId: ASSISTANTID,
                     sessionId: session.session_id,
