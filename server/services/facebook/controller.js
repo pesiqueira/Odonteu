@@ -14,6 +14,6 @@ module.exports = (server,app) => {
         WatsonAssistant.sendMessage(userId,message.getText()).then(data => {
             console.log(data)
             bot.sendTextMessage(userId, data.output.generic[0].text);
-        })
+        }).catch(err => {console.log(err)})
     });
 }
