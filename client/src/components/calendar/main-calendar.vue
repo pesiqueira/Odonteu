@@ -89,43 +89,17 @@ export default {
             return `${this.getCurrentDate.getDate()}/${this.getCurrentDate.getMonth()+1}/${this.getCurrentDate.getFullYear()}`
         },
         weekDays(){
-            return [
-                {
-                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(1 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
-                    weekDay:'Seg',
-                    Day: this.getWeekDay((1 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-                },
-                {
-                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(2 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
-                    weekDay:'Ter',
-                    Day: this.getWeekDay((2 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-                },
-                {
-                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(3 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
-                    weekDay:'Qua',
-                    Day: this.getWeekDay((3 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-                },
-                {
-                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(4 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
-                    weekDay:'Qui',
-                    Day: this.getWeekDay((4 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-                },
-                {
-                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(5 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
-                    weekDay:'Sex',
-                    Day: this.getWeekDay((5 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-                },
-                {
-                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(6 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
-                    weekDay:'Sab',
-                    Day: this.getWeekDay((6 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-                },
-                {
-                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(7 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
-                    weekDay:'Dom',
-                    Day: this.getWeekDay((7 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
-                }
-            ]
+            let weekDaysArray = [];
+            let days =['Seg','Ter','Qua','Qui','Sex','Sab','Dom'];
+            for (let i=0; i<days.length; ++i) {
+                const element = days[i];
+                weekDaysArray.push({
+                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${((i+1) - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
+                    weekDay:element,
+                    Day: this.getWeekDay(((i+1) - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
+                })
+            }
+            return weekDaysArray;
         }
     }
 }
