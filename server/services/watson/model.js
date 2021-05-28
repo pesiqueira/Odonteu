@@ -1,6 +1,6 @@
 const AssistantV2 = require('ibm-watson/assistant/v2');
 const { IamAuthenticator } = require('ibm-watson/auth');
-let session;
+let sessions=[];
 const ASSISTANTID = '97fc868e-27a6-4cf7-9609-557350f24ab3';
 const assistant = new AssistantV2({
   version: '2020-04-01',
@@ -10,31 +10,35 @@ const assistant = new AssistantV2({
   serviceUrl: 'https://gateway.watsonplatform.net/assistant/api',
 });
 
-assistant.createSession({
-  assistantId: ASSISTANTID
-}).then(res => {
-    session = res.result;
-}).catch(err => {
-    console.log(err);
-});
+const getSession = async (userId) => {
+    let session = sessions.find((item) => item.userId == userId);
+    if(session)
+        return session;
+    let result = await assistant.createSession({assistantId: ASSISTANTID});
+    session = result.result
+    session.userId = userId;
+    sessions.push(session);
+    return session;
+}
+
 
 module.exports = {
-    sendMessage(message) {
-        console.log(session);
+    sendMessage(userId,message) {
         return new Promise((resolve, reject)=>{
-            assistant.message({
-                assistantId: ASSISTANTID,
-                sessionId: session.session_id,
-                input: {
-                  'message_type': 'text',
-                  'text': message
-                  }
+            getSession(userId).then((session)=>{
+                assistant.message({
+                    assistantId: ASSISTANTID,
+                    sessionId: session.session_id,
+                    input: {
+                      'message_type': 'text',
+                      'text': message
+                      }
                 }).then(res => {
-                    resolve(res.result.output.generic[0].text)
+                        resolve(res.result.output.generic[0].text)
                 }).catch(err => {
-                    reject(err)
+                        reject(err)
                 });
-        })
-        
+            });
+        });
     }
 }
