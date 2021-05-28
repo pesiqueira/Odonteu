@@ -13,7 +13,7 @@ Router.delete('/patient/:idpaciente',PatientController.DeletePatient);
 Router.post('/schedules',ScheduleController.CreateSchedule);
 Router.get('/schedules',ScheduleController.AllSchedules);
 
-Router.get('/facebook/webhook',FacebookController.handleWebHook);
-Router.post('/facebook/webhook',FacebookController.handleWebHook);
+// Router.get('/facebook/webhook',FacebookController.handleWebHook);
+// Router.post('/facebook/webhook',FacebookController.handleWebHook);
 
 module.exports=Router;

@@ -19,5 +19,7 @@
     "url": "https://github.com/pesiqueira/Odonteu/issues"
   },
   "homepage": "https://github.com/pesiqueira/Odonteu#readme",
-  "dependencies": {}
+  "dependencies": {
+    "facebook-bot-messenger": "^1.0.9"
+  }
 }

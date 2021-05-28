@@ -1,22 +1,14 @@
-module.exports = {
-    handleWebHook(req,res){
-        let VERIFY_TOKEN = "paulosenha123"
-        // Parse the query params
-        let mode = req.query['hub.mode'];
-        let token = req.query['hub.verify_token'];
-        let challenge = req.query['hub.challenge'];
-        // Checks if a token and mode is in the query string of the request
-        if (mode && token) {
-            // Checks the mode and token sent is correct
-            if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-                // Responds with the challenge token from the request
-                console.log('WEBHOOK_VERIFIED');
-                res.status(200).send(challenge);
-            
-            } else {
-                // Responds with '403 Forbidden' if verify tokens do not match
-                res.sendStatus(403);      
-            }
-        }
-    }
+const MessengerPlatform = require('facebook-bot-messenger');
+module.exports = (server,app) => {
+    var bot = MessengerPlatform.create({
+        pageID: '101818218787059',
+        appID: '770944250283246',
+        appSecret: '58ff9326e94818160727796f7b32a701',
+        validationToken: 'paulosenha123',
+        pageToken: 'EAAK9K3IuBO4BABqNVSrllZCbDMK1xZBJeshxd5hUyttpoAQTkhmt4qs3pgV8EG4QilPCFmwmAGP1opZA61oSTSEYuMjdag02o0yLx6QEdRdNZCeA6z9G2T0t9KLxCr5XZBSwfWtknMWOFWlyGZAPJlbvBFondVeaMyM8g2uumZCPF8r8lyVYeZCe'
+      }, server);
+      app.use(bot.webhook('/webhook'));
+      bot.on(MessengerPlatform.Events.MESSAGE, function(userId, message) {
+        console.log(userId,message);
+      });
 }
