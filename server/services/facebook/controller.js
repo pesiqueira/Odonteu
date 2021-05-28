@@ -10,8 +10,10 @@ module.exports = (server,app) => {
     }, server);
     app.use(bot.webhook('/webhook'));
     bot.on(MessengerPlatform.Events.MESSAGE, function(userId, message) {
+        console.log(message);
         WatsonAssistant.sendMessage(message).then(data => {
-            bot.sendTextMessage(userId, data);
+            console.log(data)
+            bot.sendTextMessage(userId, data.output.generic[0].text);
         })
     });
 }

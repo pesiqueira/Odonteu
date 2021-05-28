@@ -34,7 +34,7 @@ module.exports = {
                       'text': message
                       }
                 }).then(res => {
-                        resolve(res.result.output.generic[0].text)
+                        resolve(res.result)
                 }).catch(err => {
                         reject(err)
                 });
