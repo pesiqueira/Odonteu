@@ -11,7 +11,7 @@ module.exports = (server,app) => {
     app.use(bot.webhook('/webhook'));
     bot.on(MessengerPlatform.Events.MESSAGE, function(userId, message) {
         console.log(message.getText());
-        WatsonAssistant.sendMessage(message.getText()).then(data => {
+        WatsonAssistant.sendMessage(userId,message.getText()).then(data => {
             console.log(data)
             bot.sendTextMessage(userId, data.output.generic[0].text);
         })
