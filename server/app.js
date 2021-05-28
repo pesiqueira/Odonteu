@@ -1,4 +1,4 @@
-var app = require('./config/express')
+const app = require('./config/express');
 
 const PORT = process.env.PORT || 1607;
 

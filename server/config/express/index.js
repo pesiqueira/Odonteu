@@ -1,9 +1,9 @@
 const   express = require('express'),
         app = express(),
         bodyParser = require('body-parser'),
-        dbConnection = require('../db'),
         path = require('path'),
-        services = require('../../services')(dbConnection);
+        dotenv = require('dotenv').config(),
+        services = require('../../services');
 
 app.disable("x-powered-by");
 app.use(bodyParser.json({ extended: true }));

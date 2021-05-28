@@ -1,8 +1,8 @@
 const rp = require('request-promise'),
     Cloudant = require ('@cloudant/cloudant'),
-    apiKey = 'tzoLvRTK3PPsbKEMmjxeIrrY-do_ljGLmNoxG29mUwKV',
-    account = '57b3f2d7-14e8-4719-a08b-1a5a042af9da-bluemix',
-    cloudantDB = 'odonteu',
+    apiKey = process.env.CLOUDANT_API_KEY,
+    account = process.env.CLOUDANT_ACCOUNT,
+    cloudantDB = process.env.CLOUDANT_DB,
     cloudant = new Cloudant({account,plugins: {iamauth: {iamApiKey: apiKey}}}),
     db = cloudant.use(cloudantDB);
 

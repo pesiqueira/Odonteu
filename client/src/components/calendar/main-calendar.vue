@@ -6,44 +6,58 @@
             </b-col>
         </b-row>
         <b-row class="week-days">
-            <div id="left-hours-space"></div>
-            <b-col class="week-day" v-for="weekDay in weekDays" :key="weekDay.Day">{{weekDay.weekDay + ' - ' + weekDay.Day}}</b-col>
-        </b-row>
-        <b-row>
             <div id="left-hours">
                 <div class="left-hour" v-for="hour in hours" :key="'hour-'+hour">
                     <div class="left-minute">
                         {{hour + ":00"}}
                     </div>
-                    <div class="left-minute" v-for="min in 4" :key="'minute-'+(min*15)">
+                    <div class="left-minute" v-for="min in 3" :key="'minute-'+(min*15)">
                     </div>
                 </div>
             </div>
-            <b-col v-for="weekDay in weekDays" :key="'hours-'+weekDay.Day" @click="showModal">
-                <b-row class="main-hour" v-for="hour in hours" :key="'hour-'+hour">
-                    <div class="main-minute"></div>
-                    <div class="main-minute" v-for="min in 4" :key="'minute-'+(min*15)">
-                    </div>
-                </b-row>
+            <b-col class="week-day" v-for="(weekDay,index) in weekDays" :key="weekDay.Day">{{weekDay.weekDay + ' - ' + weekDay.Day}}
+                    <b-row id="actual-time" v-if="actualWeekday==index+1"></b-row>
+                    <b-row class="main-hour" v-for="hour in hours" :key="'hour-'+hour">
+                        <div class="main-minute" v-for="min in 4" :key="'minute-'+(min*15)" @click="showModal(weekDay.date,hour,(min*15)-15)">
+                            <template v-for="schedule in schedulesList" >
+                                <div class="schedule" v-if="checkSchedule(schedule,weekDay,hour,min)" :key="schedule._id">
+                                    {{schedule.patient.name.substr(0,15)}}
+                                </div>
+                            </template>
+                        </div>
+                    </b-row>
             </b-col>
         </b-row>
-    <Schedule v-model="showSchedule"/>
+    <Schedule @handlerShow="showModal" :show="showSchedule" :scheduleDate="scheduleDate" :scheduleTime="scheduleTime"/>
     </div>
 </template>
 
 <script>
 import {mapGetters,mapMutations} from 'vuex';
 import Schedule from './schedule.vue';
-
+import axios from 'axios';
 export default {
     name: 'main-calendar',
     components: {
         Schedule
     },
+    mounted() {
+        let date = new Date();
+        let timeRow = document.getElementById('actual-time');
+        setInterval(() => {
+            let todayTime = new Date(date.getFullYear(),date.getMonth(),date.getDate(),7)/1000|0;
+            timeRow.style.marginTop = (((date.getTime()/1000|0) - todayTime)/37.1) + 'px';
+        },1000);
+        this.getSchedules();
+    },
     data: () => {
         return {
-            hours:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],
+            hours:[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],
             showSchedule:false,
+            actualWeekday: new Date().getDay(),
+            scheduleDate:'',
+            scheduleTime:'',
+            schedulesList: []
         }
     },
     methods:{
@@ -52,9 +66,21 @@ export default {
             let weekDate = new Date(this.getCurrentDate.getFullYear(), this.getCurrentDate.getMonth(), day);
             return weekDate.getDate();
         },
-        showModal(){
-            this.showSchedule=false;
-            this.showSchedule=true;
+        showModal(date,hour,minute){
+            this.scheduleDate=date;
+            this.scheduleTime=`${hour}:${minute}:00`
+            this.showSchedule=!this.showSchedule;
+        },
+        getSchedules(){
+            axios.get('/api/schedules').then(({data})=>{
+                let res = data.docs.length?data.docs:[];
+                this.schedulesList = res;
+            }).catch(err=>console.log(err));
+        },
+        checkSchedule(schedule,weekDay,hour,min){
+            min = min*15-15;
+            let scheduleMin = Number(schedule.time.split(':')[1]);
+            return schedule.date==weekDay.date&&schedule.time.substr(0,2)==`${hour}`&&min<=scheduleMin&&scheduleMin<min+15
         }
     },
     computed:{
@@ -65,30 +91,37 @@ export default {
         weekDays(){
             return [
                 {
+                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(1 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
                     weekDay:'Seg',
                     Day: this.getWeekDay((1 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
                 },
                 {
+                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(2 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
                     weekDay:'Ter',
                     Day: this.getWeekDay((2 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
                 },
                 {
+                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(3 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
                     weekDay:'Qua',
                     Day: this.getWeekDay((3 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
                 },
                 {
+                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(4 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
                     weekDay:'Qui',
                     Day: this.getWeekDay((4 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
                 },
                 {
+                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(5 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
                     weekDay:'Sex',
                     Day: this.getWeekDay((5 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
                 },
                 {
+                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(6 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
                     weekDay:'Sab',
                     Day: this.getWeekDay((6 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
                 },
                 {
+                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${(7 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
                     weekDay:'Dom',
                     Day: this.getWeekDay((7 - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
                 }
@@ -100,7 +133,11 @@ export default {
 
 <style>
     #main-calendar{
-        margin-left:21rem;
+        height: 51rem;
+        margin-left:20rem;
+        padding-left: 0.8rem;
+        overflow: scroll;
+        overflow-x: hidden;
     }
     #left-hours, .main-hour{
         display:block;
@@ -112,6 +149,13 @@ export default {
     }
     #left-hours, #left-hours-space{
         width:3rem;
+        padding-top:1.55rem;
+    }
+    #actual-time{
+        position: absolute;
+        width:100%;
+        height: 1px;
+        background-color:red
     }
     .left-minute, .main-minute{
         border: 0.1px solid rgba(200,200,200,0.5);
@@ -126,5 +170,12 @@ export default {
     .week-days, .week-day{
         border:1px solid rgba(200,200,200,0.5);
         border-bottom: 0.1px solid rgba(200,200,200,0.5);
+    }
+    .schedule{
+        background-color:white;
+        position: absolute;
+        padding:0.7em 0;
+        min-width: 11.6em;
+        border: 1px solid rgba(50,50,50,0.5);
     }
 </style>
