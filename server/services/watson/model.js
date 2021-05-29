@@ -27,24 +27,6 @@ const getSession = async (userId) => {
     sessions.push(session);
     return session;
 }
-
-let now = new Date();
-let time = now.getTime();
-let expireTime = time+ 5*1000;
-
-while(true){
-    agora = new Date();
-    if(agora>=expireTime){
-        console.log('expirou')
-        break;
-    }else{
-        console.log('ainda não');
-        console.log(agora.getTime());
-        console.log(expireTime);
-    }
-}
-
-
 module.exports = {
     sendMessage(userId,message) {
         return new Promise((resolve, reject)=>{
