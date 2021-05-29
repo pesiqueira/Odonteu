@@ -11,14 +11,37 @@ const assistant = new AssistantV2({
 });
 
 const getSession = async (userId) => {
+    let date = new Date();
+    let time = date.getTime();
     let session = sessions.find((item) => item.userId == userId);
-    if(session)
-        return session;
+    if(session){
+        if(session.expireTime>time){
+            session.expireTime = time;
+            return session;
+        }
+    }
     let result = await assistant.createSession({assistantId: ASSISTANTID});
     session = result.result
     session.userId = userId;
+    session.expireTime = time + 60 * 1000;
     sessions.push(session);
     return session;
+}
+
+let now = new Date();
+let time = now.getTime();
+let expireTime = time+ 5*1000;
+
+while(true){
+    agora = new Date();
+    if(agora>=expireTime){
+        console.log('expirou')
+        break;
+    }else{
+        console.log('ainda não');
+        console.log(agora.getTime());
+        console.log(expireTime);
+    }
 }
 
 
