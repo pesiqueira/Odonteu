@@ -49,7 +49,7 @@ export default {
             let v = this;
             v.items = [];
             try{
-                axios.get('http://localhost:1607/api/patients').then(({data})=>v.items = data.docs).catch(err=>console.log(err));
+                axios.get('/api/patients').then(({data})=>v.items = data.docs).catch(err=>console.log(err));
             }catch (e){
                 console.log('error in db')
             }
@@ -57,7 +57,7 @@ export default {
         deletePatient(idPatient){
             let v = this;
             try{
-                axios.delete('http://localhost:1607/api/patient/'+idPatient).then(({status})=>status==200?v.updatePatients():console.log(status))
+                axios.delete('/api/patient/'+idPatient).then(({status})=>status==200?v.updatePatients():console.log(status))
             }catch (e){
                 console.log('error in db')
             }
