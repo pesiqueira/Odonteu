@@ -20,6 +20,7 @@ const getSession = async (userId) => {
             return session;
         }
     }
+    console.log("NEW SESSION");
     let result = await assistant.createSession({assistantId: ASSISTANTID});
     session = result.result
     session.userId = userId;

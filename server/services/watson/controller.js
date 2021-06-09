@@ -6,6 +6,7 @@ module.exports = {
         return new Promise((resolve, reject)=>{
             WatsonAssistantModel.sendMessage(userId,message).then(output =>{
                 console.log(JSON.stringify(output));
+                console.log(JSON.stringify(output.intents));
                 // if(output.intents[0].intent.toLowerCase()=='agradecer'){
                 //     console.log('agradecendo')
                 // }
