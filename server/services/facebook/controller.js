@@ -12,6 +12,7 @@ module.exports = (server,app) => {
     bot.on(MessengerPlatform.Events.MESSAGE, function(userId, message) {
         console.log(message.getText());
         WatsonAssistant.analyzeMessages(userId,message.getText()).then(data => {
+            console.log(data);
             bot.sendTextMessage(userId, data.output.generic[0].text);
         }).catch(err => {console.log(err)})
     });
