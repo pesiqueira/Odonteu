@@ -16,15 +16,14 @@ const getSession = async (userId) => {
     let session = sessions.find((item) => item.userId == userId);
     if(session){
         if(session.expireTime>time){
-            session.expireTime = time;
+            session.expireTime = time + 3 * (60 * 1000);
             return session;
         }
     }
-    console.log("NEW SESSION");
     let result = await assistant.createSession({assistantId: ASSISTANTID});
     session = result.result
     session.userId = userId;
-    session.expireTime = time + 60 * 1000;
+    session.expireTime = time + 3 * (60 * 1000);
     sessions.push(session);
     return session;
 }
@@ -32,18 +31,21 @@ module.exports = {
     sendMessage(userId,message) {
         return new Promise((resolve, reject)=>{
             getSession(userId).then((session)=>{
-                console.log(session);
                 assistant.message({
                     assistantId: ASSISTANTID,
                     sessionId: session.session_id,
                     input: {
-                      'message_type': 'text',
-                      'text': message
-                      }
+                        'message_type': 'text',
+                        'text': message,
+                        options: {
+                            return_context: true
+                        }
+                    }
                 }).then(res => {
-                        resolve(res.result)
+                    console.log(JSON.stringify(res.result.context));
+                    resolve(res.result)
                 }).catch(err => {
-                        reject(err)
+                    reject(err)
                 });
             });
         });
