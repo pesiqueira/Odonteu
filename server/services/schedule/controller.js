@@ -1,12 +1,8 @@
-let modelCloudant = require('../cloudant/model.js');
-const generateId = require('uniqid');
-const PARTITION = 'schedules';
-
+const ScheduleModel = require('./model.js');
 module.exports = {
     CreateSchedule(req, res){
         let post = req.body;
-        post._id = generateId(PARTITION + ':');
-        modelCloudant.createDocument(post).then(data=>{
+        ScheduleModel.CreateSchedule(post).then(data=>{
             res.send(data);
         }).catch(err=>{
             res.sendStatus(500);
@@ -14,7 +10,6 @@ module.exports = {
         });
     },
     AllSchedules:(req,res)=>{
-        let query = {"selector":{"_id":{"$gt":0}}};
-        modelCloudant.query(query,PARTITION).then(data=>res.send(data)).catch(err=>res.send(err));
-    },
+        ScheduleModel.AllSchedules().then(data=>res.send(data)).catch(err=>res.send(err));
+    }
 }
