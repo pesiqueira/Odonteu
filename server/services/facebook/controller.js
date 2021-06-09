@@ -13,7 +13,7 @@ module.exports = (server,app) => {
         console.log(message.getText());
         WatsonAssistant.analyzeMessages(userId,message.getText()).then(data => {
             console.log(data);
-            bot.sendTextMessage(userId, data.output.generic[0].text);
+            bot.sendTextMessage(userId, data.generic[0].text);
         }).catch(err => {console.log(err)})
     });
 }
