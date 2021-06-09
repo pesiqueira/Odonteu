@@ -1,5 +1,5 @@
 const MessengerPlatform = require('facebook-bot-messenger');
-const WatsonAssistant = require('../watson/model');
+const WatsonAssistant = require('../watson/controller');
 module.exports = (server,app) => {
     var bot = MessengerPlatform.create({
         pageID: '101818218787059',
@@ -11,7 +11,7 @@ module.exports = (server,app) => {
     app.use(bot.webhook('/webhook'));
     bot.on(MessengerPlatform.Events.MESSAGE, function(userId, message) {
         console.log(message.getText());
-        WatsonAssistant.sendMessage(userId,message.getText()).then(data => {
+        WatsonAssistant.analyzeMessages(userId,message.getText()).then(data => {
             bot.sendTextMessage(userId, data.output.generic[0].text);
         }).catch(err => {console.log(err)})
     });
