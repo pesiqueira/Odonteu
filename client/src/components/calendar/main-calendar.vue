@@ -44,10 +44,11 @@ export default {
     mounted() {
         let date = new Date();
         let timeRow = document.getElementById('actual-time');
-        setInterval(() => {
-            let todayTime = new Date(date.getFullYear(),date.getMonth(),date.getDate(),7)/1000|0;
-            timeRow.style.marginTop = (((date.getTime()/1000|0) - todayTime)/37.1) + 'px';
-        },1000);
+        if(timeRow)
+            setInterval(() => {
+                let todayTime = new Date(date.getFullYear(),date.getMonth(),date.getDate(),7)/1000|0;
+                timeRow.style.marginTop = (((date.getTime()/1000|0) - todayTime)/37.1) + 'px';
+            },1000);
         this.getSchedules();
     },
     data: () => {
