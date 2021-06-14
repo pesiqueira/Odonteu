@@ -91,13 +91,13 @@ export default {
         },
         weekDays(){
             let weekDaysArray = [];
-            let days =['Seg','Ter','Qua','Qui','Sex','Sab','Dom'];
+            let days =['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
             for (let i=0; i<days.length; ++i) {
                 const element = days[i];
                 weekDaysArray.push({
-                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${((i+1) - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
+                    date: `${this.getCurrentDate.getFullYear()}-${this.getCurrentDate.getMonth()+1}-${((i) - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate()}`,
                     weekDay:element,
-                    Day: this.getWeekDay(((i+1) - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
+                    Day: this.getWeekDay(((i) - this.getCurrentDate.getDay()) + this.getCurrentDate.getDate())
                 })
             }
             return weekDaysArray;
